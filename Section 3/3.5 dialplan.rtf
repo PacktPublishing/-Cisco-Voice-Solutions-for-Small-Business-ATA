@@ -1,0 +1,45 @@
+
+Router#sh voice port summary
+                                           IN       OUT
+PORT            CH   SIG-TYPE   ADMIN OPER STATUS   STATUS   EC
+=============== == ============ ===== ==== ======== ======== ==
+0/1/0           --  fxo-ls      up    dorm idle     on-hook  y
+0/1/1           --  fxo-ls      up    dorm idle     on-hook  y
+
+dial-peer voice 1 pots
+ destination-pattern 911
+ port 0/1/0
+!
+dial-peer voice 2 pots
+ destination-pattern 8675309
+ port 0/1/0
+!
+dial-peer voice 3 pots
+ destination-pattern 5[4-6]8.
+ port 0/1/0
+ forward-digits all
+!
+dial-peer voice 4 voip
+ destination-pattern 5554444
+ session target ipv4:10.10.0.253
+!
+dial-peer voice 5 voip
+ description **Outgoing calls to SIP.US SIP Trunk**
+ translation-profile outgoing SIP.US-Outgoing
+ destination-pattern .T
+ session protocol sipv2
+ session target dns:gw1.sip.us
+ dtmf-relay rtp-nte
+ codec g711ulaw
+
+Router#sh dialplan dialpeer 1 number 911
+
+ 
+ Router#show dial-peer voice summary
+dial-peer hunt 0
+             AD                                    PRE PASS SESS-SER-GRP\  OUT
+TAG    TYPE  MIN  OPER PREFIX    DEST-PATTERN      FER THRU SESS-TARGET    STAT PORT    KEEPALIVE    VRF
+1      pots  up   up             911                0                      up   0/1/0                NA
+2      pots  up   up             8675309            0                      up   0/1/0                NA
+3      pots  up   up             5556...            0                      up   0/1/0                NA
+4      voip  up   up             5554444            0  syst ipv4:10.10.0.253                         NA

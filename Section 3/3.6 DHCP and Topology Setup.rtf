@@ -1,0 +1,32 @@
+
+ 
+Device Functions
+
+Modern Design Considerations
+DHCP on Switch
+
+
+Number Substitution
+Translate interoffice 6000 dialed number to 1-312-5555
+Router(config)#voice translation-rule 1
+rule 1 /^6/ /1312555/ type national national
+test voice translation-rule 1 6000 type national
+
+DHCP
+ip dhcp pool 10-10
+ network 10.10.0.0 255.255.255.0
+ option 150 ip 10.10.0.254
+ default-router 10.10.0.254
+ dns-server 8.8.8.8
+ domain-name PacktPub.com
+!
+ip dhcp pool 10-20
+ network 10.20.0.0 255.255.255.0
+ default-router 10.20.0.254
+ dns-server 8.8.8.8
+ domain-name PacktPub.com
+ 
+Routing Options
+router eigrp 10
+network 0.0.0.0 255.255.255.255
+no auto
